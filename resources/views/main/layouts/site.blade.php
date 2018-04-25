@@ -19,69 +19,9 @@
     <link rel="stylesheet" href="{{asset('main')}}/css/slick-theme.css">
 </head>
 <body class="grey-crumbs">
-<header>
-    <div class="container-fluid">
-        <div class="container">
-            <nav class="navbar">
-                <a href="#" class="navbar-logo">
-                    <img src="{{asset('main')}}/img/logo.png" alt="">
-                </a>
-                <button class="button-collapse hide">
-                    <i class="fa fa-bars" aria-hidden="true"></i>
-                </button>
-                <ul class="menu-collapsed">
-                    <li>
-                        <div class="dropdown show">
-                            <a class="btn btn-secondary dropdown-toggle dropdown1" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Тренировки
-                            </a>
-
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                <a class="dropdown-item" href="#">Программы тренировок</a>
-                                <a class="dropdown-item" href="#">Упражнения</a>
-                                <a class="dropdown-item" href="#">Музыка для тренировок</a>
-                                <a class="dropdown-item" href="#">Домашние тренировки</a>
-                            </div>
-                        </div>
-                    </li>
-                    <li><a href="#">Клубы</a></li>
-                    <li>
-                        <div class="dropdown show">
-                            <a class="btn btn-secondary dropdown-toggle dropdown2" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Питание
-                            </a>
-
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                <a class="dropdown-item" href="#">Программы питания</a>
-                                <a class="dropdown-item" href="#">Рецепты</a>
-                                <a class="dropdown-item" href="#">Продукты</a>
-                            </div>
-                        </div>
-                    </li>
-                    <li><a href="#">Магазин</a></li>
-                    <li><a href="#">Статьи</a></li>
-                    <li>
-                        <div class="dropdown show">
-                            <a class="btn btn-secondary dropdown-toggle dropdown3" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Еще
-                            </a>
-
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                <a class="dropdown-item" href="#">Блоги</a>
-                                <a class="dropdown-item" href="#">Люди</a>
-                            </div>
-                        </div>
-                    </li>
-
-                </ul>
-                <div class="seacrh-login">
-                    <a href="#"><i class="fa fa-search" aria-hidden="true"></i></a>
-                    <a href="#" class="login">Войти</a>
-                </div>
-            </nav>
-        </div>
-    </div>
-</header>
+<!--START MENU-->
+@yield('navigation')
+<!--END MENU-->
 
 <section class="crumbs">
     <div class="container">

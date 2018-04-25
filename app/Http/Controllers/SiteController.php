@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Repositories\MenusRepository;
+
 class SiteController extends Controller
 {
     //
@@ -16,11 +18,20 @@ class SiteController extends Controller
 
     protected $template;
 
+    // repositories
+
+    protected $m_rep;
+
     protected $vars;
 
-    public function __construct()
+    public function __construct(MenusRepository $m_rep)
     {
+        $this->m_rep = $m_rep;
+    }
 
+    public function getMenu() {
+        $menu = $this->m_rep->get();
+        return $menu;
     }
 
     public function renderOutput() {
