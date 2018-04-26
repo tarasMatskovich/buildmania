@@ -10,12 +10,12 @@
                     <i class="fa fa-bars" aria-hidden="true"></i>
                 </button>
                 <ul class="menu-collapsed">
-                    @foreach($menu as $menuItem)
+                    @foreach($menu as $k => $menuItem)
                         @if($menuItem->parent_id == 0)
                             @if($menuItem->hasChildren($menuItem->id))
                                 <li>
                                     <div class="dropdown show">
-                                        <a class="btn btn-secondary dropdown-toggle dropdown1" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <a class="btn btn-secondary dropdown-toggle dropdown{{$k+1}}" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             {{$menuItem->title}}
                                         </a>
 

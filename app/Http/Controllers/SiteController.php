@@ -11,6 +11,7 @@ class SiteController extends Controller
     //
     protected $articles_rep;
     protected $blogs_rep;
+    protected $sliders_rep;
 
     protected $title;
     protected $keywords;

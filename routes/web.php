@@ -12,5 +12,6 @@
 */
 
 Route::get('/',[
-    'uses' => 'IndexController@index'
+    'uses' => 'IndexController@index',
+    'as' => 'home'
 ]);
