@@ -3,7 +3,7 @@
     <div class="container-fluid">
         <div class="container">
             <nav class="navbar">
-                <a href="#" class="navbar-logo">
+                <a href="{{route('home')}}" class="navbar-logo">
                     <img src="{{asset('main')}}/img/logo.png" alt="">
                 </a>
                 <button class="button-collapse hide">

@@ -15,3 +15,13 @@ Route::get('/',[
     'uses' => 'IndexController@index',
     'as' => 'home'
 ]);
+
+Route::get('/articles',[
+    'uses' => 'ArticlesController@index',
+    'as' => 'articles'
+]);
+
+Route::post('/articles/ajax',[
+    'uses'=>'ArticleAjaxController@take',
+    'as' => 'articlesAjax'
+]);

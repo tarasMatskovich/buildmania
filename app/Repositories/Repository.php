@@ -13,9 +13,13 @@ abstract class Repository
 {
     protected $model = false;
 
-    public function get($select = '*', $take = false, $where = false, $order = false) {
+    public function get($select = '*',$skip = false, $take = false, $where = false, $order = false) {
         // получаем конструктор запросов
         $builder = $this->model->select($select);
+
+        if($skip) {
+            $builder->skip($skip);
+        }
 
         if($take) {
             $builder->take($take);

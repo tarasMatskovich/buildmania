@@ -245,3 +245,43 @@ $(window).on('load',function(){
 	};
 });
 
+$(document).ready(function(){
+    var deliver = 9;
+    $("#my_article_offset").val(deliver);
+
+
+	$("#more_articles").on("click",function(event){
+
+        var data = jQuery('#more_articles_form').serializeArray();
+
+        var page = data[0].value / deliver;
+
+        page = Number(page) + 1;
+
+        //alert(offset);
+
+		$.ajax({
+            url: '/articles/ajax',
+            data: data,
+            headers:{'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')},
+            type: 'POST',
+            datatype: 'JSON',
+			success:function(data){
+            	if(data.articles_content) {
+                    $("#append_articles").fadeIn(500,function(){
+                        $("#append_articles").append("<div class='col-12'><h5 style='text-align: center; color: #00bcd4;'>Страница "+ page  +"</h5></div>");
+					});
+                    $("#append_articles").append(data.articles_content);
+				} else {
+            		$(".more-comments").hide();
+				}
+
+			},
+			error:function() {
+				alert('fail(');
+			}
+		});
+		$("#my_article_offset").val(Number(data[0].value) + deliver);
+	})
+});
+

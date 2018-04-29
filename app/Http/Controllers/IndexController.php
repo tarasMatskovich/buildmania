@@ -48,13 +48,13 @@ class IndexController extends SiteController
     }
 
     protected function getLatestArticles() {
-        $articles = $this->articles_rep->get(['id','img','title','desc','category_id'],3,false,['created_at','desc']);
+        $articles = $this->articles_rep->get(['id','img','title','desc','category_id'],false,3,false,['created_at','desc']);
 
         return $articles;
     }
 
     protected function getLatestBlogs() {
-        $blogs = $this->blogs_rep->get(['id','img','title','text','blog_category_id','user_id'],3,false,['created_at','desc']);
+        $blogs = $this->blogs_rep->get(['id','img','title','text','blog_category_id','user_id'],false,3,false,['created_at','desc']);
 
         return $blogs;
     }
