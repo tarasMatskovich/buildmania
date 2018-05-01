@@ -7,6 +7,7 @@ use App\Repositories\BlogsRepository;
 use App\Repositories\MenusRepository;
 
 use App\Menu;
+use App\BlogCategory;
 
 class BlogsController extends SiteController
 {
@@ -38,11 +39,28 @@ class BlogsController extends SiteController
         $navigation = view(env('THEME').'.menu_content')->with('menu',$menu)->render();
         $this->vars = array_add($this->vars,'navigation',$navigation);
 
-        $content = view(env('THEME').'.blogs_content')->render();
+        $blogs = $this->getBlogs();
+
+
+
+        foreach($blogs as $blog) {
+            $cat_id = $blog->blog_category_id;
+            $model = BlogCategory::find($cat_id);
+            $blog->category = $model;
+        }
+
+
+
+
+        $content = view(env('THEME').'.blogs_content')->with('blogs',$blogs)->render();
 
         $this->vars = array_add($this->vars,'content',$content);
 
 
         return $this->renderOutput();
+    }
+
+    public function getBlogs() {
+        return $this->blogs_rep->get('*',0,2, false, ['created_at','desc']);
     }
 }

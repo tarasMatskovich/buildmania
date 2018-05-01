@@ -1,0 +1,155 @@
+<?php
+
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Response;
+
+use App\Blog;
+use App\BlogCategory;
+
+use Log;
+
+use App\Repositories\BlogsRepository;
+
+class BlogsAjaxController extends SiteController
+{
+    //
+    public function __construct(BlogsRepository $b_rep)
+    {
+        $this->blogs_rep = $b_rep;
+    }
+
+    public function take(Request $request) {
+        $data['offset'] = $request->input('offset');
+        $sort_type_array = false;
+        $sort_type = $request->input('sort');
+        Log::info($data['offset']);
+        if($sort_type) {
+            switch($sort_type) {
+                case 'date':
+                    $sort_type_array = ['created_at','desc'];
+                    $blogs = $this->blogs_rep->get('*',$data['offset'],2, false, $sort_type_array);
+                    break;
+                case 'rating':
+                    $sort_type_array = ['created_at','asc'];
+                    $blogs = $this->blogs_rep->get('*',$data['offset'],2, false, $sort_type_array);
+                    break;
+                case 'popularity':
+                    $sort_type_array = ['views','desc'];
+                    $blogs = $this->blogs_rep->get('*',$data['offset'],2, false, $sort_type_array);
+                    break;
+                case 'users':
+
+                    $sort_type_array = ['user_id','desc'];
+                    // сортировка по полю name в связаной таблице user
+
+                    $blogs = Blog::with('user')
+                        ->join('users', 'user_id', '=', 'users.id')
+                        ->orderBy('users.name', 'ASC')
+                        ->skip($data['offset'])
+                        ->take(2)
+                        ->get();
+
+                    foreach($blogs as $blog) {
+                        $blog->img = json_decode($blog->img);
+                    }
+                    //$blogs = $this->blogs_rep->get('*',$data['offset'],2, false, $sort_type_array);
+                    break;
+            }
+
+            $blogs_content = "";
+            if($blogs) {
+                if(!$blogs->isEmpty()) {
+                    foreach($blogs as $blog) {
+                        $cat_id = $blog->blog_category_id;
+                        $model = BlogCategory::find($cat_id);
+                        $blog->category = $model;
+                    }
+                    $blogs_content = view(env('THEME').'.only_blog_content')->with('blogs',$blogs)->render();
+                }
+            }
+
+
+            $data['blogs_content'] = $blogs_content;
+
+        } else {
+            $blogs = $this->blogs_rep->get('*',$data['offset'],2, false, ['created_at','desc']);
+            $blogs_content = "";
+            if($blogs) {
+                if(!$blogs->isEmpty()) {
+                    foreach($blogs as $blog) {
+                        $cat_id = $blog->blog_category_id;
+                        $model = BlogCategory::find($cat_id);
+                        $blog->category = $model;
+                    }
+                    $blogs_content = view(env('THEME').'.only_blog_content')->with('blogs',$blogs)->render();
+                }
+            }
+
+
+            $data['blogs_content'] = $blogs_content;
+        }
+
+
+
+
+
+
+        return Response::json($data);
+    }
+
+    public function changeSort(Request $request) {
+        $data = array();
+        // тип сортировки записей в блоге
+        $sort_type = $request->type;
+        $sort_type_array = false;
+        switch($sort_type) {
+            case 'date':
+                $sort_type_array = ['created_at','desc'];
+                $blogs = $this->blogs_rep->get('*',0,2, false, $sort_type_array);
+                break;
+            case 'rating':
+                $sort_type_array = ['created_at','asc'];
+                $blogs = $this->blogs_rep->get('*',0,2, false, $sort_type_array);
+                break;
+            case 'popularity':
+                $sort_type_array = ['views','desc'];
+                $blogs = $this->blogs_rep->get('*',0,2, false, $sort_type_array);
+                break;
+            case 'users':
+                $sort_type_array = ['user_id','desc'];
+                // сортировка по полю name в связаной таблице user
+
+                $blogs = Blog::with('user')
+                    ->join('users', 'user_id', '=', 'users.id')
+                    ->orderBy('users.name', 'ASC')
+                    ->skip(0)
+                    ->take(2)
+                    ->get();
+
+                foreach($blogs as $blog) {
+                    $blog->img = json_decode($blog->img);
+                }
+
+                //$blogs = $this->blogs_rep->get('*',0,2, false, $sort_type_array);
+                break;
+        }
+
+        foreach($blogs as $blog) {
+            $cat_id = $blog->blog_category_id;
+            $model = BlogCategory::find($cat_id);
+            $blog->category = $model;
+        }
+
+
+
+
+        $content = view(env('THEME').'.only_blog_content')->with('blogs',$blogs)->render();
+
+        $data['blogs_content'] = $content;
+
+        return Response::json($data);
+    }
+}

@@ -26,6 +26,16 @@ Route::post('/articles/ajax',[
     'as' => 'articlesAjax'
 ]);
 
+Route::post('/blogs/ajax/sorted',[
+    'uses'=>'BlogsAjaxController@changeSort',
+    'as' => 'blogsAjax2'
+]);
+
+Route::post('/blogs/ajax',[
+    'uses'=>'BlogsAjaxController@take',
+    'as' => 'blogsAjax'
+]);
+
 Route::get('/blogs',[
     'uses' => 'BlogsController@index',
     'as' => 'blogs'

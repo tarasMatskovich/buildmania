@@ -17,13 +17,6 @@ abstract class Repository
         // получаем конструктор запросов
         $builder = $this->model->select($select);
 
-        if($skip) {
-            $builder->skip($skip);
-        }
-
-        if($take) {
-            $builder->take($take);
-        }
 
         if($where) {
             $builder->where($where[0],$where[1]);
@@ -31,6 +24,14 @@ abstract class Repository
 
         if($order) {
             $builder->orderBy($order[0],$order[1]);
+        }
+
+        if($skip) {
+            $builder->skip($skip);
+        }
+
+        if($take) {
+            $builder->take($take);
         }
 
         return $this->check($builder->get());

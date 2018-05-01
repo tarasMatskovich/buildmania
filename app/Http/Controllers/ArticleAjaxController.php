@@ -19,9 +19,11 @@ class ArticleAjaxController extends SiteController
 
     public function take(Request $request) {
         $data['offset'] = $request->input('offset');
-        $articles = $this->articles_rep->get('*',$data['offset'],3);
+        $articles = $this->articles_rep->get('*',$data['offset'],3, false , ['created_at','desc']);
         $articles_content = view(env('THEME').'.only_articles_content')->with('articles',$articles)->render();
         $data['articles_content'] = $articles_content;
         return Response::json($data);
     }
+
+
 }

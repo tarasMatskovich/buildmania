@@ -40,6 +40,8 @@ class ArticlesController extends SiteController
 
         $articles = $this->getAllArticles();
 
+        //dd($articles[0]->category);
+
         $categories = $this->getCategories();
 
 

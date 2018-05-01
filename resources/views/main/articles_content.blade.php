@@ -35,7 +35,7 @@
                             <div class="more-comments">
                                 <form action="" id="more_articles_form">
                                     <span id="more_articles">Показать ещё</span>
-                                    <input type="hidden" name="offset" value="3" id="my_article_offset">
+                                    <input type="hidden" name="offset" value="9" id="my_article_offset">
                                 </form>
                             </div>
                         </div>

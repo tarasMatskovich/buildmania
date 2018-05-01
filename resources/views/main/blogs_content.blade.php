@@ -25,133 +25,112 @@
 
         <div class="row">
             <div class="col-md-9 order-2 order-md-1">
-                <div class="all-blogs-list">
-                    <div class="blog-wrapp">
-                        <div class="blog-main">
-                            <div class="blog-content">
-                                <a href="#" class="link">Углеводы или гречка - ЗЛО</a>
-                                <span class="date-info">
+                <div class="all-blogs-list" id="append_blogs">
+
+                    @if(isset($blogs))
+                        @if(!$blogs->isEmpty())
+                            @foreach($blogs as $blog)
+                                <div class="blog-wrapp">
+                                    <div class="blog-main">
+                                        <div class="blog-content">
+                                            <a href="#" class="link">{{$blog->title}}</a>
+                                            <span class="date-info">
                                         <i class="fa fa-calendar" aria-hidden="true"></i>
-                                        <span class="date">06.12.2017</span>
+                                        <span class="date">
+                                            @if(is_object($blog->created_at))
+                                                {{$blog->created_at->format("d.m.Y")}}
+                                            @endif
+                                        </span>
                                     </span>
-                                <div class="clearfix"></div>
-                                <a href="#">
-                                    <img src="{{asset(env('THEME'))}}/img/blog1.png" alt="">
-                                </a>
-                                <p>
-                                    Пусть роды принимает  уже рожавшая подруга! Она же ВСЕ знает !!!!!!!   Это про всезнающих диетолог в сети....а ЧО? Я похудела на 50 кг и вас научу! Только откуда у этого сэнсэя взялись эти лишние 50 кг история умалчивает.  А весной девочки такие....."гормональные", впечатлительные, что верят всем подряд, лишь бы одеть юбочку покороче.
+                                            <div class="clearfix"></div>
+                                            <a href="#">
+                                                <img src="{{asset(env('THEME'))}}/img/{{$blog->img->original}}" alt="">
+                                            </a>
+                                            <p>
+                                                {!! str_limit($blog->text,580) !!}
+                                            </p>
+                                        </div>
 
-                                    Нужно помнить ОДНО: Цель у всех одна, но способы достижения разные.
-
-                                    Так вот про углеводы !!! Закономерность простая. Если в тебе много жира, а мышц мало, то все угли уйдут в ЖИИИИИИИИИИИИИИР,  если  мышц много, а жира мало, то они  (углеводы) уйдут...
-                                </p>
-                            </div>
-
-                            <div class="blog-info">
-                                <div class="blog-info-row">
-                                    <i class="fa fa-weixin" aria-hidden="true"></i>
-                                    <span class="value">3</span>
+                                        <div class="blog-info">
+                                            <div class="blog-info-row">
+                                                <i class="fa fa-weixin" aria-hidden="true"></i>
+                                                <span class="value">3</span>
+                                            </div>
+                                            <div class="blog-info-row">
+                                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                                <span class="value">{{$blog->views}}</span>
+                                            </div>
+                                            <div class="blog-info-row">
+                                                <i class="fa fa-star" aria-hidden="true"></i>
+                                                <span class="value">{{(json_decode($blog->rating)->all / json_decode($blog->rating)->count)}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="blog-dop-info">
+                                        <span class="cat">{{$blog->category->title}}</span>
+                                        <div class="author">
+                                            <img src="{{asset(env('THEME'))}}/img/{{json_decode($blog->user->img)->mini}}" alt="">
+                                            <span>{{$blog->user->name}}</span>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
                                 </div>
-                                <div class="blog-info-row">
-                                    <i class="fa fa-eye" aria-hidden="true"></i>
-                                    <span class="value">345</span>
-                                </div>
-                                <div class="blog-info-row">
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <span class="value">10</span>
-                                </div>
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
-                        <div class="blog-dop-info">
-                            <span class="cat">Питание</span>
-                            <div class="author">
-                                <img src="{{asset(env('THEME'))}}/img/human2.png" alt="">
-                                <span>Даша Лунёва</span>
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>
+                            @endforeach
+                        @else
+                            <p>Нету записей в блоге</p>
+                        @endif
 
-                    <div class="blog-wrapp">
-                        <div class="blog-main">
-                            <div class="blog-content">
-                                <a href="#" class="link">Новый год - НОВЫЕ ПРАВИЛА</a>
-                                <span class="date-info">
-                                        <i class="fa fa-calendar" aria-hidden="true"></i>
-                                        <span class="date">12.10.2017</span>
-                                    </span>
-                                <div class="clearfix"></div>
+                    @else
+                        <p>Нету записей в блоге</p>
+                    @endif
 
-                                <p>
-                                    Привет, я Солнышко:) Я никогда не была полненькой, но у меня все же имеется небольшой лишний вес. Я давно мечтала сделать своё тело подтянутым и красивым. Но, как всегда, я откладывала это дело. С наступлением нового, 2018 года я решила - взять себя в руки и заняться своим телом. Буду потихотьку разбираться в питании, упражнениях и наконец-то пойду в зал. Я надеюсь, у меня всё получится
-                                </p>
-                            </div>
 
-                            <div class="blog-info">
-                                <div class="blog-info-row">
-                                    <i class="fa fa-weixin" aria-hidden="true"></i>
-                                    <span class="value">1</span>
-                                </div>
-                                <div class="blog-info-row">
-                                    <i class="fa fa-eye" aria-hidden="true"></i>
-                                    <span class="value">35</span>
-                                </div>
-                                <div class="blog-info-row">
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <span class="value">0</span>
-                                </div>
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
-                        <div class="blog-dop-info">
-                            <span class="cat">Питание</span>
-                            <div class="author">
-                                <img src="{{asset(env('THEME'))}}/img/human2.png" alt="">
-                                <span>Даша Лунёва</span>
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>
 
+                </div>
+                @if($blogs && !$blogs->isEmpty())
                     <div class="row">
                         <div class="col">
                             <div class="more-comments">
-                                <span>Показать ещё</span>
+                                <form action="" id="more_blogs_form">
+                                    <span id="more_blogs">Показать ещё</span>
+                                    <input type="hidden" name="offset" value="2" id="my_blog_offset">
+                                    <input type="hidden" name="sort" value="" id="my_blog_sort">
+                                </form>
                             </div>
                         </div>
                     </div>
-                </div>
+                @endif
             </div>
             <div class="col-md-3 order-1 order-md-2">
                 <form action="" class="sort">
 
 
-                    <div class="grouped-form-1">
+                    <div class="grouped-form-1" id="form_check">
 
                         <p>Сортировать</p>
 
-                        <div class="form-check">
+                        <div class="form-check" >
                             <label class="form-check-label">
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+                                <input class="form-check-input" type="radio" name="blogs_sort" id="exampleRadios1" value="rating" >
                                 По рейтингу
                             </label>
                         </div>
                         <div class="form-check">
                             <label class="form-check-label">
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
+                                <input class="form-check-input" type="radio" name="blogs_sort" id="exampleRadios2" value="popularity">
                                 По популярности
                             </label>
                         </div>
                         <div class="form-check">
                             <label class="form-check-label">
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
+                                <input checked class="form-check-input" type="radio" name="blogs_sort" id="exampleRadios3" value="date">
                                 По дате
                             </label>
                         </div>
                         <div class="form-check">
                             <label class="form-check-label">
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
+                                <input class="form-check-input" type="radio" name="blogs_sort" id="exampleRadios4" value="users">
                                 По пользователям
                             </label>
                         </div>

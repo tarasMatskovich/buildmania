@@ -246,6 +246,7 @@ $(window).on('load',function(){
 });
 
 $(document).ready(function(){
+	// подгрузка асинхронным запросом статей
     var deliver = 9;
     $("#my_article_offset").val(deliver);
 
@@ -268,10 +269,13 @@ $(document).ready(function(){
             datatype: 'JSON',
 			success:function(data){
             	if(data.articles_content) {
-                    $("#append_articles").fadeIn(500,function(){
-                        $("#append_articles").append("<div class='col-12'><h5 style='text-align: center; color: #00bcd4;'>Страница "+ page  +"</h5></div>");
-					});
+                    $("#append_articles").append("<div class='col-12'><h5 style='text-align: center; color: #00bcd4;'>Страница "+ page  +"</h5></div>");
                     $("#append_articles").append(data.articles_content);
+
+                    $("#append_articles").hide();
+                    $("#append_articles").fadeIn(500,function(){
+
+					});
 				} else {
             		$(".more-comments").hide();
 				}
@@ -283,5 +287,103 @@ $(document).ready(function(){
 		});
 		$("#my_article_offset").val(Number(data[0].value) + deliver);
 	})
+
+    $("#my_blog_sort").val($('input[name=blogs_sort]:checked').val());
+
+    $("#form_check").change(function(){
+        $("#my_blog_sort").val($('input[name=blogs_sort]:checked').val());
+        var sort_type = $('input[name=blogs_sort]:checked').val();
+
+        // making all content
+
+        var BlogDeliver = 2;
+        $("#my_blog_offset").val(BlogDeliver);
+
+        var data = jQuery('#more_blogs_form').serializeArray();
+        var data2 = {
+			"type":sort_type
+		};
+
+        var page = data[0].value / BlogDeliver;
+
+        var sort_type = data[1].value;
+
+        page = Number(page) + 1;
+
+
+        $.ajax({
+            url: '/blogs/ajax/sorted',
+            data: data2,
+            headers:{'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')},
+            type: 'POST',
+            datatype: 'JSON',
+            success:function(data){
+                if(data.blogs_content) {
+                    $("#append_blogs").html(data.blogs_content);
+                    $("#append_blogs").hide();
+                    $("#append_blogs").fadeIn(500,function(){
+
+                    });
+
+                } else {
+                    //$(".more-comments").hide();
+                }
+
+            },
+            error:function() {
+                alert('fail(');
+            }
+        });
+        //$("#my_blog_offset").val(Number(data[0].value) + BlogDeliver);
+
+
+
+
+    });
+
+	// подгрузка асинхронным запросом записей блога
+    var BlogDeliver = 2;
+    $("#my_blog_offset").val(BlogDeliver);
+
+
+    $("#more_blogs").on("click",function(event){
+
+        var data = jQuery('#more_blogs_form').serializeArray();
+
+        var page = data[0].value / BlogDeliver;
+
+        var sort_type = data[1].value;
+
+        page = Number(page) + 1;
+
+
+        $.ajax({
+            url: '/blogs/ajax',
+            data: data,
+            headers:{'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')},
+            type: 'POST',
+            datatype: 'JSON',
+            success:function(data){
+                if(data.blogs_content) {
+                    $("#append_blogs").append("<div class='col-12'><h5 style='text-align: center; color: #00bcd4;'>Страница "+ page  +"</h5></div>");
+                    $("#append_blogs").append(data.blogs_content);
+                    $("#append_blogs").hide();
+                    $("#append_blogs").fadeIn(500,function(){
+
+                    });
+
+                } else {
+                    $(".more-comments").hide();
+                }
+
+            },
+            error:function() {
+                alert('fail(');
+            }
+        });
+        $("#my_blog_offset").val(Number(data[0].value) + BlogDeliver);
+    })
+
+
 });
 
