@@ -31,9 +31,14 @@
         <div class="container">
             <div class="row">
                 <ul>
-                    <li><a href="#">Главная</a></li>
-                    <li><i class="fa fa-chevron-right" aria-hidden="true"></i></li>
-                    <li><a href="#">Программы тренировок</a></li>
+                    @if(isset($crumbs))
+                        @if(is_array($crumbs))
+                            @foreach($crumbs as $crumb)
+                                <li><a href="{{$crumb['url']}}">{{$crumb['name']}}</a></li>
+                                <li><i class="fa fa-chevron-right" aria-hidden="true"></i></li>
+                            @endforeach
+                        @endif
+                    @endif
                 </ul>
             </div>
         </div>

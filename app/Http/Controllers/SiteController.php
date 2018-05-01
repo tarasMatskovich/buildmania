@@ -19,6 +19,8 @@ class SiteController extends Controller
 
     protected $template;
 
+    protected $crumbs;
+
     // repositories
 
     protected $m_rep;

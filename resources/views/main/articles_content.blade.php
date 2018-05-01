@@ -53,7 +53,7 @@
                             @foreach($categories as $cat)
                                 @if($cat->parent_id == 0)
                                     <li>
-                                        <a href="#">
+                                        <a href="{{route('articles').'/'.$cat->url}}">
                                             {{$cat->title}}
                                             <i class="fa fa-chevron-right" aria-hidden="true"></i>
                                         </a>
@@ -62,7 +62,7 @@
 
                                 @foreach($categories as $item)
                                     @if($item->parent_id == $cat->id)
-                                        <li><a href="#" class="sub-cat">{{$item->title}}</a></li>
+                                        <li><a href="{{route('articles').'/'.$cat->url}}" class="sub-cat">{{$item->title}}</a></li>
                                     @endif
                                 @endforeach
                             @endforeach

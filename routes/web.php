@@ -25,3 +25,8 @@ Route::post('/articles/ajax',[
     'uses'=>'ArticleAjaxController@take',
     'as' => 'articlesAjax'
 ]);
+
+Route::get('/blogs',[
+    'uses' => 'BlogsController@index',
+    'as' => 'blogs'
+]);

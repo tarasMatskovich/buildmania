@@ -220,12 +220,12 @@
                                     <div class="row">
                                         <div class="col-sm-3">
                                             <a href="#"><img src="{{asset('main')}}/img/{{json_decode($blog->user->img)->mini}}" alt=""></a>
-                                            <a href="#" class="name">Анастасия Лапушкина</a>
+                                            <a href="#" class="name">{{$blog->user->name}}</a>
                                         </div>
                                         <div class="col-sm-9">
-                                            <a href="#"><h4>TheStart</h4></a>
+                                            <a href="#"><h4>{{$blog->title}}</h4></a>
                                             <p>
-                                                С завтрашнего дня ,будем пробовать начинать заново заниматься.Был огромный перерыв ,застой,поднабрал жирка и скинул сухую массу ....Надо все возвращать .
+                                                {!!  str_limit($blog->text,150) !!}
                                             </p>
                                         </div>
                                     </div>
@@ -234,7 +234,7 @@
                         @endforeach
                     @endif
                 </div>
-                <a href="#" class="more">Последнее в блоге</a>
+                <a href="{{route('blogs')}}" class="more">Последнее в блоге</a>
             </div>
             <!--END BLOGS-->
 
@@ -269,7 +269,7 @@
                         <p>Нет статтей</p>
                     @endif
                 </div>
-                <a href="#" class="more">Последние статьи</a>
+                <a href="{{route('articles')}}" class="more">Последние статьи</a>
             </div>
             <!--END ARTICLES-->
         </div>
