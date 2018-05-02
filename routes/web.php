@@ -31,6 +31,11 @@ Route::post('/blogs/ajax/sorted',[
     'as' => 'blogsAjax2'
 ]);
 
+Route::post('/blogs/ajax/categories',[
+    'uses'=>'BlogsAjaxController@changeCategory',
+    'as' => 'blogsAjax3'
+]);
+
 Route::post('/blogs/ajax',[
     'uses'=>'BlogsAjaxController@take',
     'as' => 'blogsAjax'

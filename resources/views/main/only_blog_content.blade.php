@@ -3,7 +3,7 @@
         <div class="blog-wrapp">
             <div class="blog-main">
                 <div class="blog-content">
-                    <a href="#" class="link">{{$blog->title}}</a>
+                    <a href="#" class="link">{{$blog->title}} [{{$blog->category->title}}] [id={{$blog->id}}]</a>
                     <span class="date-info">
                                         <i class="fa fa-calendar" aria-hidden="true"></i>
                                         <span class="date">

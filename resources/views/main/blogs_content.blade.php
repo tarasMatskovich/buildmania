@@ -33,7 +33,7 @@
                                 <div class="blog-wrapp">
                                     <div class="blog-main">
                                         <div class="blog-content">
-                                            <a href="#" class="link">{{$blog->title}}</a>
+                                            <a href="#" class="link">{{$blog->title}} [{{$blog->category->title}}] [id={{$blog->id}}]</a>
                                             <span class="date-info">
                                         <i class="fa fa-calendar" aria-hidden="true"></i>
                                         <span class="date">
@@ -138,64 +138,21 @@
 
 
 
-                    <div class="grouped-form-2">
+                    <div class="grouped-form-2" id="blogs_cats">
 
                         <p>Рубрики</p>
 
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input class="form-check-input" type="checkbox" value="">
-                                Фармакалогия
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input class="form-check-input" type="checkbox" value="">
-                                Питание
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input class="form-check-input" type="checkbox" value="">
-                                Фитнес
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input class="form-check-input" type="checkbox" value="">
-                                Бодибилдинг
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input class="form-check-input" type="checkbox" value="">
-                                Вопросы треннинга
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input class="form-check-input" type="checkbox" value="">
-                                Образ жизни
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input class="form-check-input" type="checkbox" value="">
-                                Другое
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input class="form-check-input" type="checkbox" value="">
-                                Воркаут
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input class="form-check-input" type="checkbox" value="">
-                                Пуэрлифтинг
-                            </label>
-                        </div>
+                        @if(isset($categories) && !$categories->isEmpty())
+                            @foreach($categories as $catItem)
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" type="checkbox" value="{{$catItem->id}}" name="{{$catItem->url}}">
+                                        {{$catItem->title}}
+                                    </label>
+                                </div>
+                            @endforeach
+                        @endif
+
                     </div>
                 </form>
             </div>

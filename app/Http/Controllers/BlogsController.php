@@ -49,10 +49,15 @@ class BlogsController extends SiteController
             $blog->category = $model;
         }
 
+        // получаем колекцию категорий для записей блога
+
+        $categories = BlogCategory::select('*')->get();
 
 
 
-        $content = view(env('THEME').'.blogs_content')->with('blogs',$blogs)->render();
+
+
+        $content = view(env('THEME').'.blogs_content')->with(['blogs'=>$blogs,'categories'=>$categories])->render();
 
         $this->vars = array_add($this->vars,'content',$content);
 

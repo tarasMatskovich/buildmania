@@ -291,6 +291,13 @@ $(document).ready(function(){
     $("#my_blog_sort").val($('input[name=blogs_sort]:checked').val());
 
     $("#form_check").change(function(){
+    	// смена типы сортировки
+        var categories = [];
+        $('#blogs_cats input:checkbox:checked').each(function(){
+
+            categories.push($(this).val())
+        });
+        $(".more-comments").show();
         $("#my_blog_sort").val($('input[name=blogs_sort]:checked').val());
         var sort_type = $('input[name=blogs_sort]:checked').val();
 
@@ -301,7 +308,8 @@ $(document).ready(function(){
 
         var data = jQuery('#more_blogs_form').serializeArray();
         var data2 = {
-			"type":sort_type
+			"type":sort_type,
+			"id_array":categories
 		};
 
         var page = data[0].value / BlogDeliver;
@@ -326,7 +334,7 @@ $(document).ready(function(){
                     });
 
                 } else {
-                    //$(".more-comments").hide();
+                    $(".more-comments").hide();
                 }
 
             },
@@ -348,7 +356,30 @@ $(document).ready(function(){
 
     $("#more_blogs").on("click",function(event){
 
+        var categories = [];
+        $('#blogs_cats input:checkbox:checked').each(function(){
+
+            categories.push($(this).val())
+        });
+
         var data = jQuery('#more_blogs_form').serializeArray();
+
+        data[2] = {'id_array':categories};
+
+        var my_data = {
+        	'offset':data[0].value,
+			'sort':data[1].value,
+			'id_array':categories
+		}
+
+        // for (var key in data) {
+        //     // этот код будет вызван для каждого свойства объекта
+        //     // ..и выведет имя свойства и его значение
+        //
+        //     for(var k in data[key]) {
+        //         alert( "Ключ: " + key + " значение: " + data[key][k] );
+			// }
+        // }
 
         var page = data[0].value / BlogDeliver;
 
@@ -359,7 +390,7 @@ $(document).ready(function(){
 
         $.ajax({
             url: '/blogs/ajax',
-            data: data,
+            data: my_data,
             headers:{'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')},
             type: 'POST',
             datatype: 'JSON',
@@ -383,6 +414,58 @@ $(document).ready(function(){
         });
         $("#my_blog_offset").val(Number(data[0].value) + BlogDeliver);
     })
+
+	// смена рубрики ( категории)
+
+	$("#blogs_cats").change(function(){
+        //location="http://ex-fs.net";
+        var categories = [];
+        $('#blogs_cats input:checkbox:checked').each(function(){
+
+        	categories.push($(this).val())
+        });
+        // загружаем новый контент - только те записи блога, которые входять в список категорий
+
+        $(".more-comments").show();
+        $("#my_blog_sort").val($('input[name=blogs_sort]:checked').val());
+        var sort_type = $('input[name=blogs_sort]:checked').val();
+
+        // making all content
+
+        var BlogDeliver = 2;
+        $("#my_blog_offset").val(BlogDeliver);
+
+        var data2 = {
+            "type":sort_type,
+			'id_array':categories
+        };
+
+
+        $.ajax({
+            url: '/blogs/ajax/categories',
+            data: data2,
+            headers:{'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')},
+            type: 'POST',
+            datatype: 'JSON',
+            success:function(data){
+                if(data.blogs_content) {
+                    $("#append_blogs").html(data.blogs_content);
+                    $("#append_blogs").hide();
+                    $("#append_blogs").fadeIn(500,function(){
+
+                    });
+
+                } else {
+                    $(".more-comments").hide();
+                    $("#append_blogs").html("<h3>В этой категории блога ещё нету записей</h3>");
+                }
+
+            },
+            error:function() {
+                alert('fail(');
+            }
+        });
+	});
 
 
 });
