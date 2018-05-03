@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col">
                 <div class="title">
-                    <h1>Блог</h1>
+                    <h1>Результаты поиска:</h1>
                     <hr>
                 </div>
                 @if(!$errors->isEmpty())
@@ -32,9 +32,8 @@
         </div>
 
         <div class="row">
-            <div class="col-md-9 order-2 order-md-1">
+            <div class="col-md-12 order-2 order-md-1">
                 <div class="all-blogs-list" id="append_blogs">
-
                     @if(isset($blogs))
                         @if(!$blogs->isEmpty())
                             @foreach($blogs as $blog)
@@ -86,83 +85,61 @@
                                 </div>
                             @endforeach
                         @else
-                            <p>Нету записей в блоге</p>
+                            <p>Посик не дал результатов</p>
                         @endif
 
                     @else
-                        <p>Нету записей в блоге</p>
+                        <p>Посик не дал результатов</p>
                     @endif
 
 
 
                 </div>
-                @if($blogs && !$blogs->isEmpty())
-                    <div class="row">
-                        <div class="col">
-                            <div class="more-comments">
-                                <form action="" id="more_blogs_form">
-                                    <span id="more_blogs">Показать ещё</span>
-                                    <input type="hidden" name="offset" value="2" id="my_blog_offset">
-                                    <input type="hidden" name="sort" value="" id="my_blog_sort">
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                @endif
+
             </div>
-            <div class="col-md-3 order-1 order-md-2">
-                <form action="" class="sort">
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="pagination">
+                    <ul class="pages-list ul-reset horisontal-menu">
+                        @if($blogs->lastPage() > 1)
+
+                            @if($blogs->currentPage() != 1)
+                                    <div class="left-arrow">
+                                        <a href="{{$blogs->url($blogs->currentPage()-1)}}" class="my-page-link">&laquo;</a>
+                                    </div>
+                            @endif
 
 
-                    <div class="grouped-form-1" id="form_check">
-
-                        <p>Сортировать</p>
-
-                        <div class="form-check" >
-                            <label class="form-check-label">
-                                <input class="form-check-input" type="radio" name="blogs_sort" id="exampleRadios1" value="rating" >
-                                По рейтингу
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input class="form-check-input" type="radio" name="blogs_sort" id="exampleRadios2" value="popularity">
-                                По популярности
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input checked class="form-check-input" type="radio" name="blogs_sort" id="exampleRadios3" value="date">
-                                По дате
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input class="form-check-input" type="radio" name="blogs_sort" id="exampleRadios4" value="users">
-                                По пользователям
-                            </label>
-                        </div>
-                    </div>
+                            @for($i = 1; $i <= $blogs->lastPage(); $i++)
+                                @if($blogs->currentPage() == $i)
+                                    <li><a class="disabled-page">{{$i}}</a></li>
+                                @else
+                                    <li><a href="{{$blogs->url($i)}}">{{$i}}</a></li>
+                                @endif
+                            @endfor
 
 
 
-                    <div class="grouped-form-2" id="blogs_cats">
+                            @if($blogs->currentPage() != $blogs->lastPage())
+                                    <div class="right-arrow">
+                                        <a href="{{$blogs->url($blogs->currentPage()+1)}}" class="my-page-link">&raquo;</a>
+                                    </div>
+                            @endif
 
-                        <p>Рубрики</p>
 
-                        @if(isset($categories) && !$categories->isEmpty())
-                            @foreach($categories as $catItem)
-                                <div class="form-check">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input" type="checkbox" value="{{$catItem->id}}" name="{{$catItem->url}}">
-                                        {{$catItem->title}}
-                                    </label>
-                                </div>
-                            @endforeach
                         @endif
+                        {{--<li><a href="#">1</a></li>--}}
+                        {{--<li><a href="#">2</a></li>--}}
+                        {{--<li><a href="#">3</a></li>--}}
+                        {{--<li><a href="#">4</a></li>--}}
 
-                    </div>
-                </form>
+
+                        {{--<div class="last-arrow">--}}
+                            {{--<i class="fa fa-angle-double-right" aria-hidden="true"></i>--}}
+                        {{--</div>--}}
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

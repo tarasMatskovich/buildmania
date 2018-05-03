@@ -7,7 +7,11 @@ use App\Repositories\BlogsRepository;
 use App\Repositories\MenusRepository;
 
 use App\Menu;
+use App\Blog;
 use App\BlogCategory;
+use Session;
+
+use Validator;
 
 class BlogsController extends SiteController
 {
@@ -36,14 +40,12 @@ class BlogsController extends SiteController
     public function index() {
         // получаем колекцию моделей меню
         $menu = $this->getMenu();
-        $navigation = view(env('THEME').'.menu_content')->with('menu',$menu)->render();
-        $this->vars = array_add($this->vars,'navigation',$navigation);
-
+        $navigation = view(env('THEME') . '.menu_content')->with('menu', $menu)->render();
+        $this->vars = array_add($this->vars, 'navigation', $navigation);
         $blogs = $this->getBlogs();
 
 
-
-        foreach($blogs as $blog) {
+        foreach ($blogs as $blog) {
             $cat_id = $blog->blog_category_id;
             $model = BlogCategory::find($cat_id);
             $blog->category = $model;
@@ -54,18 +56,83 @@ class BlogsController extends SiteController
         $categories = BlogCategory::select('*')->get();
 
 
+        $content = view(env('THEME') . '.blogs_content')->with(['blogs' => $blogs, 'categories' => $categories])->render();
 
-
-
-        $content = view(env('THEME').'.blogs_content')->with(['blogs'=>$blogs,'categories'=>$categories])->render();
-
-        $this->vars = array_add($this->vars,'content',$content);
+        $this->vars = array_add($this->vars, 'content', $content);
 
 
         return $this->renderOutput();
     }
 
+    public function search (Request $request) {
+        // получаем колекцию моделей меню
+        $menu = $this->getMenu();
+        $navigation = view(env('THEME') . '.menu_content')->with('menu', $menu)->render();
+        $this->vars = array_add($this->vars, 'navigation', $navigation);
+
+        if($request->isMethod('post')) {
+            $rules = array();
+            $messages = [
+                'required' => 'Введите искомое слово',
+                'min' => 'Минимальное кол-во символов - 3',
+                'max' => 'Максимальное кол-во символов - 255'
+            ];
+            $rules = [
+                'keywords' => 'required|min:3|max:255'
+            ];
+            $validator = Validator::make($request->only(['keywords']),$rules,$messages);
+            //dd($validator);
+            if($validator->fails()) {
+                return redirect('/blogs')
+                    ->withErrors($validator)
+                    ->with('oldInput',$request->only(['keywords'])['keywords']);
+            }
+
+
+
+            $blogs = $this->getSearchedBlogs($request->only(['keywords'])['keywords']);
+
+            session(['oldInput'=>$request->only(['keywords'])['keywords']]);
+
+
+            $content = view(env('THEME') . '.search_blogs_content')->with(['blogs' => $blogs])->render();
+
+            $this->vars = array_add($this->vars, 'content', $content);
+
+
+            return $this->renderOutput();
+
+
+        } else {
+            $oldInput = $request->only('page');
+            if($oldInput) {
+                $blogs = $this->getSearchedBlogs(session('oldInput'));
+
+                $lastPage = $blogs->lastPage();
+
+                $currentPage = $blogs->currentPage();
+
+                if($currentPage < 0 || $currentPage > $lastPage) {
+                    abort(404);
+                }
+
+                $content = view(env('THEME') . '.search_blogs_content')->with(['blogs' => $blogs])->render();
+
+                $this->vars = array_add($this->vars, 'content', $content);
+
+
+                return $this->renderOutput();
+            } else {
+                abort(404);
+            }
+        }
+    }
+
     public function getBlogs() {
         return $this->blogs_rep->get('*',0,2, false, ['created_at','desc']);
+    }
+
+    public function getSearchedBlogs($keyword) {
+        return $this->blogs_rep->getSearchedBlogs($keyword);
     }
 }

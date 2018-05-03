@@ -41,7 +41,15 @@ Route::post('/blogs/ajax',[
     'as' => 'blogsAjax'
 ]);
 
+
 Route::get('/blogs',[
     'uses' => 'BlogsController@index',
     'as' => 'blogs'
 ]);
+
+Route::match(['get','post'],'/blogs/search',[
+    'uses' => 'BlogsController@search',
+    'as' => 'blogsSearch'
+]);
+
+

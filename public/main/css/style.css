@@ -8,11 +8,21 @@ body {
 	font-family: 'Open Sans', sans-serif;
 }
 
+.disabled-page:hover {
+	background-color: transparent;
+}
+
+.my-page-link {
+	font-size: 24px!important;
+	height: 30px;
+	padding: 3px!important;
+}
+
 header .container-fluid {
 	background: #163a5e;
 }
 nav.navbar {
-	background: #163a5e!important;	
+	background: #163a5e!important;
 	padding: 0;
 }
 nav.navbar a {
@@ -845,13 +855,13 @@ footer .container {
 .pagination ul.pages-list .left-arrow {
 	position: absolute;
 	left: -25px;
-	top: 3px;
+	top: -7px;
 }
 
 .pagination ul.pages-list .right-arrow {
 	position: absolute;
 	right: -25px;
-	top: 3px;
+	top: -7px;
 }
 
 .pagination ul.pages-list .last-arrow {
