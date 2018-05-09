@@ -26,6 +26,21 @@ Route::post('/articles/ajax',[
     'as' => 'articlesAjax'
 ]);
 
+Route::post('/articles/ajax/sorted',[
+    'uses' => 'ArticleAjaxController@takeByCat',
+    'as' => 'articlesAjaxSorted'
+]);
+
+Route::get('/articles/{id}',[
+    'uses' => 'ArticlesController@take',
+    'as' => 'article'
+])->where('id','[0-9]+');
+
+Route::get('/articles/{cat_alias}',[
+    'uses' => 'ArticlesController@byCategories',
+    'as' => 'articlesByCat'
+])->where('name','[A-Za-z]+');
+
 Route::post('/blogs/ajax/sorted',[
     'uses'=>'BlogsAjaxController@changeSort',
     'as' => 'blogsAjax2'
@@ -42,6 +57,7 @@ Route::post('/blogs/ajax',[
 ]);
 
 
+
 Route::get('/blogs',[
     'uses' => 'BlogsController@index',
     'as' => 'blogs'
@@ -51,5 +67,11 @@ Route::match(['get','post'],'/blogs/search',[
     'uses' => 'BlogsController@search',
     'as' => 'blogsSearch'
 ]);
+
+Route::post('/article/ajaxComments',[
+    'uses' => 'ArticleAjaxController@moreComments'
+]);
+
+
 
 

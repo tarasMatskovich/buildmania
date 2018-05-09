@@ -246,6 +246,62 @@ $(window).on('load',function(){
 });
 
 $(document).ready(function(){
+	// подгрузка асинхронным запросом статей, по категориям
+
+
+    var deliver = 9;
+    $("#my_article_cat_offset").val(deliver);
+
+
+    $("#more_articles_cat").on("click",function(event){
+
+
+        var data = jQuery('#more_articles_cat_form').serializeArray();
+
+        var page = data[0].value / deliver;
+
+        page = Number(page) + 1;
+
+        //alert(offset);
+
+
+        var my_data = {
+            'offset':data[0].value,
+            'cat_id':data[1].value,
+        }
+
+        $.ajax({
+            url: '/articles/ajax/sorted',
+            data: my_data,
+            headers:{'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')},
+            type: 'POST',
+            datatype: 'JSON',
+            success:function(data){
+                if(data.articles_content) {
+                    $("#append_articles").append("<div class='col-12'><h5 style='text-align: center; color: #00bcd4;'>Страница "+ page  +"</h5></div>");
+                    $("#append_articles").append(data.articles_content);
+
+                    $("#append_articles").hide();
+                    $("#append_articles").fadeIn(500,function(){
+
+                    });
+                } else {
+                    $(".more-comments").hide();
+                }
+
+            },
+            error:function() {
+                alert('fail(');
+            }
+        });
+        $("#my_article_cat_offset").val(Number(data[0].value) + deliver);
+    });
+
+
+
+
+
+
 	// подгрузка асинхронным запросом статей
     var deliver = 9;
     $("#my_article_offset").val(deliver);
@@ -286,7 +342,7 @@ $(document).ready(function(){
 			}
 		});
 		$("#my_article_offset").val(Number(data[0].value) + deliver);
-	})
+	});
 
     $("#my_blog_sort").val($('input[name=blogs_sort]:checked').val());
 
@@ -465,6 +521,52 @@ $(document).ready(function(){
                 alert('fail(');
             }
         });
+	});
+
+    $(".prevent-default").click(function(event){
+    	event.preventDefault();
+	});
+
+    // подгрузка асинхронным запросом коментариев к статтьи
+
+	$("#more_comments").click(function(event){
+		var default_offset = 4;
+		var offset = $(this).attr('comments-offset');
+		var id = $(this).attr('article-id');
+
+		var data = {
+			"id" : id,
+			"offset" : offset
+		};
+		var page = (Number(offset) / Number(default_offset)) + 1;
+
+        $.ajax({
+            url: '/article/ajaxComments',
+            data: data,
+            headers:{'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')},
+            type: 'POST',
+            datatype: 'JSON',
+            success:function(data){
+                if(data.comments_content) {
+                    $("#append_comments").append("<div class='col-12'><h5 style='text-align: center; color: #00bcd4;'>Страница "+ page  +"</h5></div>");
+                    $("#append_comments").append(data.comments_content);
+                    $("#append_comments").hide();
+                    $("#append_comments").fadeIn(500,function(){
+
+                    });
+                } else {
+                    $(".more-comments").hide();
+                }
+
+            },
+            error:function() {
+                alert('fail(');
+            }
+        });
+        var newOffset = Number(offset) + Number(default_offset);
+        $(this).attr('comments-offset', newOffset);
+
+
 	});
 
 

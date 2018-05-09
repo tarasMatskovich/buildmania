@@ -25,7 +25,6 @@
 <!--START MENU-->
 @yield('navigation')
 <!--END MENU-->
-
 @if(Route::currentRouteName() !== 'home')
     <section class="crumbs">
         <div class="container">
