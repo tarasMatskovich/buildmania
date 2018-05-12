@@ -8,6 +8,7 @@ use Response;
 
 use App\Blog;
 use App\BlogCategory;
+use App\BlogComment;
 
 use Log;
 
@@ -320,5 +321,30 @@ class BlogsAjaxController extends SiteController
 
         $data['blogs_content'] = $content;
         return Response::json($data);
+    }
+
+
+    public function moreComments(Request $request) {
+        $id = $request->id;
+        $offset = $request->offset;
+        $comments = $this->getCommentsToBlog($id,$offset);
+
+
+        if($comments) {
+            $comments = $comments->groupBy('parent_id');
+
+            foreach($comments as $comment) {
+                foreach($comment as $item) {
+                    $item->user->img = json_decode($item->user->img);
+                }
+            }
+        }
+
+        $data['comments_content'] = view(env('THEME').'.only_comments')->with('comments',$comments)->render();
+        return Response::json($data);
+    }
+
+    public function getCommentsToBlog($id, $offset) {
+        return BlogComment::select("*")->skip($offset)->take(4)->where('blog_id',$id)->get();
     }
 }

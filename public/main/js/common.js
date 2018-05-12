@@ -70,7 +70,6 @@ $(document).ready(function(){
 	// loading of image
 
 	$(".cur-program-img-wrap").css({
-		'background': 'url(img/eat-programm1.jpg)',
 		'background-attachment' : 'fixed',
 		'background-repeat' : 'no-repeat'
 	});
@@ -568,6 +567,52 @@ $(document).ready(function(){
 
 
 	});
+
+	// подргузка асинхронным запросом коментариев к записи блога
+
+
+
+    $("#more_blog_comments").click(function(event){
+        var default_offset = 4;
+        var offset = $(this).attr('comments-offset');
+        var id = $(this).attr('article-id');
+
+        var data = {
+            "id" : id,
+            "offset" : offset
+        };
+        var page = (Number(offset) / Number(default_offset)) + 1;
+
+        $.ajax({
+            url: '/blog/ajaxComments',
+            data: data,
+            headers:{'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')},
+            type: 'POST',
+            datatype: 'JSON',
+            success:function(data){
+                if(data.comments_content) {
+                    $("#append_comments").append("<div class='col-12'><h5 style='text-align: center; color: #00bcd4;'>Страница "+ page  +"</h5></div>");
+                    $("#append_comments").append(data.comments_content);
+                    $("#append_comments").hide();
+                    $("#append_comments").fadeIn(500,function(){
+
+                    });
+                } else {
+                    $(".more-comments").hide();
+                }
+
+            },
+            error:function() {
+                alert('fail(');
+            }
+        });
+        var newOffset = Number(offset) + Number(default_offset);
+        $(this).attr('comments-offset', newOffset);
+
+
+    });
+
+
 
 
 });

@@ -21,11 +21,11 @@
     <link rel="stylesheet" href="{{asset('main')}}/css/slick.css">
     <link rel="stylesheet" href="{{asset('main')}}/css/slick-theme.css">
 </head>
-<body class="grey-crumbs">
+<body class="{{(Route::currentRouteName() === 'clubs' ? "grey-crumbs" : "")}}">
 <!--START MENU-->
 @yield('navigation')
 <!--END MENU-->
-@if(Route::currentRouteName() !== 'home')
+@if(Route::currentRouteName() !== 'home' && Route::currentRouteName() !== 'program')
     <section class="crumbs">
         <div class="container">
             <div class="row">

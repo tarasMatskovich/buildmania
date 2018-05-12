@@ -3,7 +3,7 @@
         <div class="blog-wrapp">
             <div class="blog-main">
                 <div class="blog-content">
-                    <a href="#" class="link">{{$blog->title}} [{{$blog->category->title}}] [id={{$blog->id}}]</a>
+                    <a href="{{route('blog',['id'=>$blog->id])}}" class="link">{{$blog->title}} [{{$blog->category->title}}] [id={{$blog->id}}]</a>
                     <span class="date-info">
                                         <i class="fa fa-calendar" aria-hidden="true"></i>
                                         <span class="date">
@@ -13,7 +13,7 @@
                                         </span>
                                     </span>
                     <div class="clearfix"></div>
-                    <a href="#">
+                    <a href="{{route('blog',['id'=>$blog->id])}}">
                         <img src="{{asset(env('THEME'))}}/img/{{$blog->img->original}}" alt="">
                     </a>
                     <p>

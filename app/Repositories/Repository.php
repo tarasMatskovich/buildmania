@@ -13,7 +13,7 @@ abstract class Repository
 {
     protected $model = false;
 
-    public function get($select = '*',$skip = false, $take = false, $where = false, $order = false) {
+    public function get($select = '*',$skip = false, $take = false, $where = false, $order = false, $paginate = false) {
         // получаем конструктор запросов
         $builder = $this->model->select($select);
 
@@ -32,6 +32,10 @@ abstract class Repository
 
         if($take) {
             $builder->take($take);
+        }
+
+        if($paginate) {
+            return $this->check($builder->paginate($paginate));
         }
 
         return $this->check($builder->get());

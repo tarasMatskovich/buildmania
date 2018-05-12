@@ -59,7 +59,7 @@ class ArticleAjaxController extends SiteController
     }
 
     public function getCommentsToArticle($id, $offset) {
-        return $this->comments_rep->get('*',$offset,2,['article_id',$id]);
+        return $this->comments_rep->get('*',$offset,4,['article_id',$id]);
     }
 
 

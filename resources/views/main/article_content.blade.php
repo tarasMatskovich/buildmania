@@ -8,7 +8,7 @@
                     <img src="{{asset(env('THEME'))}}/img/{{$article->img->original}}" alt="">
                 </div>
                 <div class="part-article-title">
-                    <h1>Как запастись жизненной энергией и укрепить здоровье</h1>
+                    <h1>{{$article->title}}</h1>
                 </div>
             </div>
             <div class="col-md-3 order-1 order-md-2">
@@ -64,9 +64,6 @@
                     </div>
                     <div class="clearfix"></div>
                     <div class="my-text">
-                        <p>
-                            {{$article->title}}
-                        </p>
 
                         @if(!empty($subjects))
                         <div class="insertion">

@@ -58,10 +58,16 @@ Route::post('/blogs/ajax',[
 
 
 
+
 Route::get('/blogs',[
     'uses' => 'BlogsController@index',
     'as' => 'blogs'
 ]);
+
+Route::get('/blogs/{id}',[
+    'uses' => 'BlogsController@take',
+    'as' => 'blog'
+])->where('id','[0-9]+');
 
 Route::match(['get','post'],'/blogs/search',[
     'uses' => 'BlogsController@search',
@@ -71,6 +77,27 @@ Route::match(['get','post'],'/blogs/search',[
 Route::post('/article/ajaxComments',[
     'uses' => 'ArticleAjaxController@moreComments'
 ]);
+
+Route::post('/blog/ajaxComments',[
+    'uses' => 'BlogsAjaxController@moreComments'
+]);
+
+Route::get('/programs',[
+    'uses' => 'ProgramsController@index',
+    'as' => 'programs'
+]);
+
+Route::match(['get','post'],'/programs/find',[
+    'uses' => 'ProgramsController@find',
+    'as' => 'programs.find'
+]);
+
+Route::get('/programs/{id}',[
+   'uses' => 'ProgramsController@take',
+    'as' => 'program'
+])->where('id','[0-9]+');
+
+
 
 
 

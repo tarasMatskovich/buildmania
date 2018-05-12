@@ -135,11 +135,6 @@ class ArticlesController extends SiteController
         $comments = $this->getCommentsToArticle($article->id);
 
 
-
-
-
-
-
         if($comments) {
             $comments = $comments->groupBy('parent_id');
 

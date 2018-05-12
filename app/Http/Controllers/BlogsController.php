@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Repositories\BlogsRepository;
 use App\Repositories\MenusRepository;
+use App\Repositories\CommentsRepository;
 
 use App\Menu;
 use App\Blog;
@@ -12,13 +13,16 @@ use App\BlogCategory;
 use Session;
 
 use Validator;
+use App\BlogComment;
 
 class BlogsController extends SiteController
 {
     //
 
-    public function __construct(BlogsRepository $b_rep) {
+    public function __construct(BlogsRepository $b_rep, CommentsRepository $c_rep) {
+        // сохраняем нужные для роботы репозитории
         $this->blogs_rep = $b_rep;
+        $this->comments_rep = $c_rep;
         // вызываем родительский конструктор для инициализации модели Меню
         parent::__construct(new MenusRepository(new Menu));
         $this->template = env('THEME').'.blogs';
@@ -35,6 +39,61 @@ class BlogsController extends SiteController
         ];
 
         $this->vars = array_add($this->vars,'crumbs',$this->crumbs);
+
+
+    }
+
+    public function take($id) {
+        // получаем колекцию моделей меню
+        $menu = $this->getMenu();
+        $navigation = view(env('THEME') . '.menu_content')->with('menu', $menu)->render();
+        $this->vars = array_add($this->vars, 'navigation', $navigation);
+        $blog = $this->getBlogsById($id);
+
+        $cat_id = $blog->blog_category_id;
+        $model = BlogCategory::find($cat_id);
+        $blog->category = $model;
+
+
+        $blog->rating = json_decode($blog->rating);
+
+        $blog->user->img = json_decode($blog->user->img);
+
+
+
+        $comments = $this->getCommentsToBlog($blog->id);
+
+
+
+
+        if($comments) {
+            $comments = $comments->groupBy('parent_id');
+
+            foreach($comments as $comment) {
+                foreach($comment as $item) {
+                    $item->user->img = json_decode($item->user->img);
+                }
+            }
+        }
+
+
+
+
+        $content = view(env('THEME').'.blog_content')->with(['blog'=>$blog,'comments'=>$comments]);
+
+        $this->vars = array_add($this->vars, 'content', $content);
+
+        return $this->renderOutput();
+
+
+    }
+
+    public function getCommentsToBlog($id) {
+        return BlogComment::select("*")->take(4)->where('blog_id',$id)->get();
+    }
+
+    public function getBlogsById($id) {
+        return $this->blogs_rep->get('*',false,false,['id',$id])->first();
     }
 
     public function index() {
